@@ -14,6 +14,8 @@ Test hardware: ESP32-C5HR8 rev 1.0, 16 MB flash, 8 MB PSRAM, native USB.
 - Switching through `capture -skimmer` and `wardrive` returns the expected status;
   wardrive resumes emitting WiFi and BLE records.
 - Physical tester confirms text is visible with the final software-SPI display.
+- Physical tester confirms readable layout/colors, updating counts, and BOOT
+  long-press switching between wardrive and skimmer modes.
 
 The first test used a QIO merged boot header and failed in ROM; the deployment
 recipe now preserves DIO, matching the generated C5 bootloader. Hardware SPI
@@ -22,7 +24,6 @@ works on this unit and is used for the small, once-per-second text-only display.
 
 Remaining checks before marking support fully validated:
 
-- Physical BOOT button and display layout/counter confirmation.
 - Longer scan soak and live Ragnar USB ingestion.
 - Zigbee frame capture against a known test transmitter. Zigbee is deliberately
   not added to the default WiFi/BLE wardrive cycle.
