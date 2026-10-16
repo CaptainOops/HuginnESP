@@ -16,6 +16,13 @@ Test hardware: ESP32-C5HR8 rev 1.0, 16 MB flash, 8 MB PSRAM, native USB.
 - Physical tester confirms text is visible with the final software-SPI display.
 - Physical tester confirms readable layout/colors, updating counts, and BOOT
   long-press switching between wardrive and skimmer modes.
+- Live Ragnar ingestion verified over native USB on a Pi 5: companion remains
+  identified as Huginn in wardrive mode; WiFi records increase from 33 to 52
+  (both 2.4/5 GHz), and BLE records from 83 to 112 during a 25-second check.
+  With a power-bank setup, adding the dongle alongside an RTL-SDR and an external
+  USB WiFi adapter triggered shared USB over-current disconnects. Removing the
+  external WiFi adapter restored ingestion; over-current counters remained
+  unchanged throughout that check. This is a short functional test, not a soak.
 
 The first test used a QIO merged boot header and failed in ROM; the deployment
 recipe now preserves DIO, matching the generated C5 bootloader. Hardware SPI
@@ -24,7 +31,7 @@ works on this unit and is used for the small, once-per-second text-only display.
 
 Remaining checks before marking support fully validated:
 
-- Longer scan soak and live Ragnar USB ingestion.
+- Longer scan soak.
 - Zigbee frame capture against a known test transmitter. Zigbee is deliberately
   not added to the default WiFi/BLE wardrive cycle.
 
