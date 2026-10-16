@@ -1,0 +1,32 @@
+# T-Dongle-C5 validation
+
+Test hardware: ESP32-C5HR8 rev 1.0, 16 MB flash, 8 MB PSRAM, native USB.
+
+- `pio run -e lilygo-tdongle-c5`: passed.
+- `pio run -e esp32c5`: passed (existing headless target).
+- New board JSON, web-flasher manifests, and workflow YAML parse successfully.
+- Full pre-existing firmware backup verified against flash before testing.
+- Final merged test image uses DIO at 80 MHz, with bootloader at 0x2000.
+- Firmware write verified by esptool.
+- Runtime reports the correct board and all 8 MB PSRAM; heap after init: 120020 bytes.
+- Live USB capture: 226 WiFi and 144 BLE records in a 25-second sample,
+  with no panic, assertion, brownout, or reset messages in that sample.
+- Switching through `capture -skimmer` and `wardrive` returns the expected status;
+  wardrive resumes emitting WiFi and BLE records.
+- Physical tester confirms text is visible with the final software-SPI display.
+
+The first test used a QIO merged boot header and failed in ROM; the deployment
+recipe now preserves DIO, matching the generated C5 bootloader. Hardware SPI
+produced a blank display in the first working radio build; explicit software SPI
+works on this unit and is used for the small, once-per-second text-only display.
+
+Remaining checks before marking support fully validated:
+
+- Physical BOOT button and display layout/counter confirmation.
+- Longer scan soak and live Ragnar USB ingestion.
+- Zigbee frame capture against a known test transmitter. Zigbee is deliberately
+  not added to the default WiFi/BLE wardrive cycle.
+
+An Espressif startup warning about allocation of an MSPI dummy cacheline appears
+before Arduino setup. PSRAM is subsequently added to the heap and reported as
+8388608 bytes. This warning has not been resolved in this board-support change.
